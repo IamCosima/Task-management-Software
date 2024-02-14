@@ -3,11 +3,11 @@ import tkinter as tk
 from PIL import ImageTk, Image
 #from CTkListbox import *
 from CTkMessagebox import CTkMessagebox
+from datetime import datetime
 
 Main_title_font=("Roboto", 24)
 Sub_title_font= ("Roboto", 17)
 Main_body_font=("Roboto", 14)
-
 logged_in = ''
 title_list = ''
 
@@ -58,6 +58,7 @@ def login_main():
         else:
             login_page.withdraw()
             main_page.deiconify()
+            loadshedding_Today()
             loadname()
     #widget
 
@@ -75,7 +76,7 @@ def login_main():
     Label_Password =  CTkLabel(master=frame_Login_Details, text="  Password:", anchor="w", justify="left", font= Sub_title_font, image=password_icon, compound="left")
     Label_Password.pack(anchor="w", pady=(21, 0), padx=(25, 0))
 
-    entry_password =  CTkEntry(master=frame_Login_Details,placeholder_text="Enter password",width=225, border_width=1)
+    entry_password =  CTkEntry(master=frame_Login_Details,placeholder_text="Enter password",width=225, border_width=1,show ='*')
     entry_password.pack(anchor="w", padx=(25, 0))
 
     login_button = CTkButton(master=frame_Login_Details, text="Login", font=Main_body_font, width=225,command=sucsess)
@@ -110,19 +111,11 @@ def signup_page():
                 f.write('{}\n'.format(username))
                 f.write('{}\n'.format(password1))
             
-            CTkMessagebox(title="Error", message='Registation was Sucsessful', icon="check")
+            CTkMessagebox(title="Success", message='Registation was Succsessful', icon="check")
             redirect()
-
-
-    #--text: #d4fbf5;
-    #--background: #010d0b;
-    #--primary: #77f2db;
-    #--secondary: #0e458d;
-    #--accent: #223fea;
     #frame
-    frame_register_Details =  CTkFrame(master=register_page, width=300, height=480)
-    frame_register_Details.pack_propagate(0)
-    frame_register_Details.pack(expand=True, side="right")
+    frame_register_Details =  CTkFrame(master=register_page, width=280, height=400)
+    frame_register_Details.pack()
 
     #images
     email_icon = Image.open("assets\email-icon.png")
@@ -135,31 +128,34 @@ def signup_page():
     #widget
         
     signup_label_Title =CTkLabel(master=frame_register_Details, text="Create an account", anchor="w", justify="left", font=Main_title_font)
-    signup_label_Title.pack(anchor="w", pady=(50, 5), padx=(25, 0))
+    signup_label_Title.place(x=20,y=20)
     
     signup_label_Subtitle =CTkLabel(master=frame_register_Details, text="Please enter relevant information", anchor="w", justify="left", font= Sub_title_font)
-    signup_label_Subtitle.pack(anchor="w", padx=(25, 0))
+    signup_label_Subtitle.place(x=20,y=60)
 
     signup_label_Username =CTkLabel(master=frame_register_Details, text="  Username:", anchor="w", justify="left", font= Sub_title_font, image=email_icon, compound="left")
-    signup_label_Username.pack(anchor="w", pady=(38, 0), padx=(25, 0))
+    signup_label_Username.place(x=20,y=100)
 
     signup_entry_Username = CTkEntry(master=frame_register_Details,placeholder_text="Enter Username",width=225, border_width=1)
-    signup_entry_Username.pack(anchor="w", padx=(25, 0))
+    signup_entry_Username.place(x=20,y=140)
 
     signup_Label_Password =CTkLabel(master=frame_register_Details, text="  Password:", anchor="w", justify="left", font= Sub_title_font, image=password_icon, compound="left")
-    signup_Label_Password.pack(anchor="w", pady=(21, 0), padx=(25, 0))
+    signup_Label_Password.place(x=20,y=180)
 
-    signup_entry_password =CTkEntry(master=frame_register_Details,placeholder_text="Enter password",width=225, border_width=1)
-    signup_entry_password.pack(anchor="w", padx=(25, 0))
+    signup_entry_password =CTkEntry(master=frame_register_Details,placeholder_text="Enter password",width=225, border_width=1,show ='*')
+    signup_entry_password.place(x=20,y=220)
 
     signup_Label_Passwordcon =CTkLabel(master=frame_register_Details, text="  Password Confirmation:", anchor="w", justify="left", font= Sub_title_font, image=password_icon, compound="left")
-    signup_Label_Passwordcon.pack(anchor="w", pady=(21, 0), padx=(25, 0))
+    signup_Label_Passwordcon.place(x=20,y=260)
 
-    signup_entry_passwordcon =  CTkEntry(master=frame_register_Details,placeholder_text="Enter password",width=225, border_width=1)
-    signup_entry_passwordcon.pack(anchor="w", padx=(25, 0))
+    signup_entry_passwordcon =  CTkEntry(master=frame_register_Details,placeholder_text="Enter password",width=225, border_width=1,show ='*')
+    signup_entry_passwordcon.place(x=20,y=300)
 
-    register_button = CTkButton(master=frame_register_Details, text="Sign Up", font=Main_body_font, width=225,command=signup)
-    register_button.pack(anchor="w",pady=(21, 0), padx=(25, 0))
+    back_button = CTkButton(master=frame_register_Details, text="Back", font=Main_body_font, width=100,command=redirect)
+    back_button.place(x=20,y=360)
+
+    register_button = CTkButton(master=frame_register_Details, text="Sign Up", font=Main_body_font, width=100,command=signup)
+    register_button.place(x=140,y=360)
 
 
 def splash():
@@ -170,10 +166,14 @@ def splash():
 
     Label_splash =  CTkLabel(master=splash_screen,text="Task Management",text_color='#d4fbf5')
     Label_splash.pack(pady=20)
-
+    progressbar_splash = CTkProgressBar(master=splash_screen,orientation="horizontal",width=180)
+    progressbar_splash.pack(pady=20)
+    
+    progressbar_splash.start()
     def show():
         splash_screen.destroy()
         login_main()
+        #signup_page()
         #main_page.deiconify()
     
     splash_screen.after(3000,show)
@@ -212,8 +212,8 @@ def save_tasks():
     global logged_in
     global title_list
     filename = logged_in +'_'+ title_list.replace("\n", "") + '.txt'
-    with open(filename,'w') as f:
-        tasks = task_list.get(0,END) + task_priority_list.get(0,END)
+    with open(filename,'w',encoding='utf-8') as f:
+        tasks = task_list.get(0,END) + task_priority_list.get(0,END) + task_complete_list.get(0,END)
         for task in tasks:
             f.write(task + "\n")
 
@@ -228,7 +228,7 @@ def load_tasks():
     print("current tile name " + title_list)
     filename = logged_in +'_'+ title_list.replace("\n", "") + '.txt'
     try:
-        with open(filename,'r') as f:
+        with open(filename,'r',encoding='utf-8') as f:
             tasks = f.readlines()
             for task in tasks:
                 if '!!!' in task:
@@ -246,7 +246,7 @@ def loadname():
     global title_list
     filename_2 = 'users/'+ logged_in + '.txt'
     try:
-       with open(filename_2,'r') as f:
+       with open(filename_2,'r',encoding='utf-8') as f:
             names = f.readlines()
             for name in names:
                 if '+' in name:
@@ -275,7 +275,7 @@ def completed_task():
         task_list.delete(selected_normal[0])
         save_tasks()
     elif selected_priority:
-        task_complete_list.insert(END,task_complete_list.get(selected_priority[0])+'\u2713')
+        task_complete_list.insert(END,task_priority_list.get(selected_priority[0])+'\u2713')
         task_priority_list.delete(selected_priority[0])
         save_tasks()
 
@@ -290,7 +290,7 @@ def loadlist():
     global logged_in
     filename_2 = 'users/'+ logged_in + '.txt'
     try:
-       with open(filename_2,'r') as f:
+       with open(filename_2,'r',encoding='utf-8') as f:
             names = f.readlines()
             for name in names:
                 if title_list == name.strip():
@@ -307,12 +307,41 @@ def loadlist():
 def addname():
     global logged_in
     filename_2 =  'users/'+ logged_in + '.txt'
-    with open(filename_2,'a') as f:
+    with open(filename_2,'a',encoding='utf-8') as f:
         tasksname = '+'+ task_title_entry.get().upper()
         f.write(tasksname +"\n")
     loadname()
     task_title_entry.delete(0,END)
 
+#Loadshedding timetable
+stage = ["1"]
+day_top    = [ "01" ,"03" ,"04", "05", "07", "08", "09", "011","12","13","14","16"] 
+day_bottom = ["17","19","20","21","23","24","25","27","28","29","30","16"]
+day_not = ["2","18","6","22","10","26","15","31"]
+time = ["20:00-22:30" , "04:00-06:30" , "12:00-14:30"  , "8:00-20:30" , "02:00-04:30" , "10:00-12:30" , "16:00-18:30"  ,"00:00-02:30 " ," 08:00-10:30"   , "14:00-16:30"  , "22:00-0:30" , "06:00-08:30"]
+
+def loadshedding_Today():
+    day = datetime.now()
+    i = 0
+    for x in day_top:
+        i += 1
+        for y in day_bottom:
+            for z in day_not:
+                if day.strftime("%d") == x:
+                    print(time[i])
+                    #print(time.strftime("%d"))
+                    Time_for_Today.configure(text= "There is loadshedding today at: " + time[i])
+                    return "There is loadshedding today at " + time[i]
+                elif day.strftime("%d") == y:
+                    print(time[i])
+                    #print(time.strftime("%d"))
+                    Time_for_Today.configure(text= "There is loadshedding today at: " + time[i])
+                    return "There is loadshedding today at " + time[i]
+                elif day.strftime("%d") == z:
+                    Time_for_Today.configure(text= "There is no Loadshedding :)")
+                    return "There is no Loadshedding"
+    
+#Add make a percentage graph of complete vs not compleate
 
 task_title = CTkLabel(master =main_page,font=Main_title_font,text='Create List')
 task_title.place(x=40,y=10)
@@ -344,7 +373,7 @@ task_entrybox =  CTkEntry(master =main_page,placeholder_text="Enter Task",width=
 task_entrybox.place(x=40,y=140)
 
 #frame
-frame_list =  CTkFrame(master=main_page, width=720, height=480)
+frame_list =  CTkFrame(master=main_page, width=1080, height=480)
 frame_list.place(x=40,y=220)
 
 
@@ -364,7 +393,21 @@ task_complete_title = CTkLabel(master =frame_list,font=Main_title_font,text='Com
 task_complete_title.place(x=450,y=20)
 task_complete_list = tk.Listbox(frame_list,width=15,height=15,font=Main_body_font)
 task_complete_list.place(x=450,y=50)
+
+
+
+frame_Load = CTkFrame(master=frame_list, width=360, height=180)
+frame_Load.place(x=650,y= 20)
+current_stage = CTkLabel(master =frame_Load, font=Sub_title_font,text='Current Stage: Stage 1, 2 Hours a Day')
+current_stage.place(x=20,y=20)
+
+Time_for_Today = CTkLabel(master =frame_Load, font=Sub_title_font,text='Times for Today')
+Time_for_Today.place(x=20,y=60)
+
+
 splash()
+
+
 
 
 tk.mainloop()
@@ -373,5 +416,3 @@ tk.mainloop()
 #https://github.com/Akascape/CTkListbox
 #https://github.com/tomschimansky/customtkinter
 #https://github.com/Akascape/CTkMessagebox
-
-#test
