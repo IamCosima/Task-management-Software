@@ -1,7 +1,6 @@
 from customtkinter import *
 import tkinter as tk
 from PIL import ImageTk, Image
-#from CTkListbox import *
 from CTkMessagebox import CTkMessagebox
 from datetime import datetime
 
@@ -341,7 +340,6 @@ def loadshedding_Today():
                     Time_for_Today.configure(text= "There is no Loadshedding :)")
                     return "There is no Loadshedding"
     
-#Add make a percentage graph of complete vs not compleate
 
 task_title = CTkLabel(master =main_page,font=Main_title_font,text='Create List')
 task_title.place(x=40,y=10)
@@ -412,7 +410,7 @@ splash()
 
 tk.mainloop()
 
-#attribuations
-#https://github.com/Akascape/CTkListbox
+#attribuations for Libaries used
 #https://github.com/tomschimansky/customtkinter
 #https://github.com/Akascape/CTkMessagebox
+#https://github.com/python-pillow/Pillow/
